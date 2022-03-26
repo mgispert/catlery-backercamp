@@ -1,24 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Flex } from "@chakra-ui/react";
+import { getTags, addCat, editCat, removeCat } from "./features/cats/catSlice";
+
+import { CreateCat, EditCat, Navbar, Footer, CatsGallery } from "./components";
 
 function App() {
+  const cats = useSelector((state) => state.cats.catsList);
+  const dispatch = useDispatch();
+  const [isModalShown, showEditModal] = useState(false);
+  const [catSelected, setCatSelected] = useState(undefined);
+
+  const handleAddCat = (newCat) => dispatch(addCat(newCat));
+
+  const handleEditCat = (catUrl) =>
+    dispatch(editCat({ index: catSelected, url: catUrl }));
+
+  const handleCatClicked = (catIndex) => {
+    showEditModal(true);
+    setCatSelected(catIndex);
+  };
+
+  const handleRemoveCat = () => dispatch(removeCat(catSelected));
+
+  const handleCloseEdit = () => showEditModal(false);
+
+  useEffect(() => {
+    dispatch(getTags());
+  }, [dispatch]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Flex flexDirection="column" alignItems="center" height="100%">
+      <Navbar />
+      <CreateCat onSubmit={handleAddCat} />
+      {isModalShown && (
+        <EditCat
+          urlCat={cats[catSelected]}
+          onClose={handleCloseEdit}
+          onEdit={handleEditCat}
+          onRemove={handleRemoveCat}
+        />
+      )}
+      <CatsGallery cats={cats} onCatClicked={handleCatClicked} />
+      <Footer />
+    </Flex>
   );
 }
 

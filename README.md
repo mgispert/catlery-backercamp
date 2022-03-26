@@ -1,3 +1,15 @@
+<div align="center">
+<h1>Catlery!</h1>
+
+<img
+  height="160"
+  width="160"
+  alt="cat"
+  src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/facebook/304/cat_1f408.png"
+/>
+
+</div>
+
 # CATLERY
 
 This project is called Catlery because it's a gallery of your favourite cat's pictures!

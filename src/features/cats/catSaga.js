@@ -1,12 +1,16 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 
 import { CATAAS_URL } from "../../constants";
-import { getTagsSuccess } from "./catSlice";
+import { getTagsFailure, getTagsSuccess } from "./catSlice";
 
 function* workGetTags() {
-  const tags = yield call(() => fetch(`${CATAAS_URL}/api/tags`));
-  const parsedTags = yield tags.json();
-  yield put(getTagsSuccess(parsedTags));
+  try {
+    const tags = yield call(() => fetch(`${CATAAS_URL}/api/tags`));
+    const parsedTags = yield tags.json();
+    yield put(getTagsSuccess(parsedTags));
+  } catch (error) {
+    yield put(getTagsFailure("oh noo"));
+  }
 }
 
 function* catSaga() {

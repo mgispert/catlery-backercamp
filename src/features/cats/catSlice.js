@@ -7,6 +7,7 @@ export const catSlice = createSlice({
     tagsList: [],
     isError: false,
     isLoading: false,
+    errorMessage: null,
   },
   reducers: {
     addCat: (state, action) => {
@@ -27,7 +28,8 @@ export const catSlice = createSlice({
       state.tagsList = action.payload;
       state.isLoading = false;
     },
-    getTagsFailure: (state) => {
+    getTagsFailure: (state, action) => {
+      state.errorMessage = action.payload;
       state.isLoading = false;
       state.isError = true;
     },

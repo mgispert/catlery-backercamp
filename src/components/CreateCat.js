@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Flex, Stack, Button, Image, Divider, Text } from "@chakra-ui/react";
 
 import { constructPreview } from "../utils";
 import CatForm from "./CatForm";
+import { getCat } from "../features/cats/catSlice";
 
 export const CreateCat = ({ onSubmit }) => {
+  const dispatch = useDispatch();
+
   const [url, setUrl] = useState();
   // hack to get fresh url from cataas
   const [hash, setHash] = useState(Date.now());
@@ -46,6 +49,8 @@ export const CreateCat = ({ onSubmit }) => {
   };
 
   const handleSumbit = () => {
+    dispatch(getCat({ tag, isTag, text, filter }));
+
     onSubmit(url);
     resetForm();
     setHash(Date.now());

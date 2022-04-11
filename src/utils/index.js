@@ -37,3 +37,6 @@ export const constructPreview = ({
 
   onPreviewConstructed(url);
 };
+
+export const buildCatURL = ({ isTag, tag, text, ...queryParams }) =>
+  getCat(text, isTag, tag) + getQueryString(queryParams);

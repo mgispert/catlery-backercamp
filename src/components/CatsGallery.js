@@ -1,4 +1,5 @@
 import { Flex, Image } from "@chakra-ui/react";
+import { CATAAS_URL } from "../constants";
 
 export const CatsGallery = ({ onCatClicked, cats }) => (
   <Flex
@@ -15,7 +16,7 @@ export const CatsGallery = ({ onCatClicked, cats }) => (
       <Image
         key={index}
         onClick={() => onCatClicked(index)}
-        src={cat}
+        src={`${CATAAS_URL}/${cat.url}`}
         alt="Cat image"
         maxWidth="30rem"
         maxHeight="15rem"

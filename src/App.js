@@ -6,7 +6,10 @@ import { getTags, addCat, editCat, removeCat } from "./features/cats/catSlice";
 import { CreateCat, EditCat, Navbar, Footer, CatsGallery } from "./components";
 
 function App() {
+  //TODO: remove catsList from state, replace with data
   const cats = useSelector((state) => state.cats.catsList);
+  const catsData = useSelector((state) => state.cats.data);
+
   const error = useSelector((state) => state.cats.errorMessage);
 
   const dispatch = useDispatch();
@@ -43,7 +46,7 @@ function App() {
           onRemove={handleRemoveCat}
         />
       )}
-      <CatsGallery cats={cats} onCatClicked={handleCatClicked} />
+      <CatsGallery cats={catsData} onCatClicked={handleCatClicked} />
       <Footer />
       {error && (
         <Alert status="error">

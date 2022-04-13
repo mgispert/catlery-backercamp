@@ -1,24 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import {
-  Flex,
-  Radio,
-  RadioGroup,
-  Stack,
-  Button,
-  FormControl,
-  FormLabel,
-  Input,
-  Select,
-  Image,
-  Divider,
-  Text,
-} from "@chakra-ui/react";
+import { useDispatch, useSelector } from "react-redux";
+import { Flex, Stack, Button, Image, Divider, Text } from "@chakra-ui/react";
 
 import { constructPreview } from "../utils";
-import { FILTERS } from "../constants";
+import CatForm from "./CatForm";
+import { getCat } from "../features/cats/catSlice";
 
 export const CreateCat = ({ onSubmit }) => {
+  const dispatch = useDispatch();
+
   const [url, setUrl] = useState();
   // hack to get fresh url from cataas
   const [hash, setHash] = useState(Date.now());
@@ -41,7 +31,7 @@ export const CreateCat = ({ onSubmit }) => {
       hash,
       onPreviewConstructed: setUrl,
     });
-  }, [tag, text, filter, catType, hash]);
+  }, [tag, text, filter, hash, isTag]);
 
   const handleChangeTag = (e) => setTag(e.target.value);
 
@@ -59,6 +49,8 @@ export const CreateCat = ({ onSubmit }) => {
   };
 
   const handleSumbit = () => {
+    dispatch(getCat({ tag, isTag, text, filter }));
+
     onSubmit(url);
     resetForm();
     setHash(Date.now());
@@ -95,53 +87,14 @@ export const CreateCat = ({ onSubmit }) => {
         </Flex>
       ) : (
         <>
-          <Flex flexDirection="column" minWidth="240px">
-            <RadioGroup onChange={setCatType} value={catType}>
-              <Stack direction="row" fontWeight={"bold"} letterSpacing={"5px"}>
-                <Radio value="gif">GIF</Radio>
-                <Radio value="tag">PIC</Radio>
-              </Stack>
-            </RadioGroup>
-            {isTag && (
-              <Select
-                placeholder="Select tag"
-                onChange={handleChangeTag}
-                mt={4}
-              >
-                {tags.map((tag, index) => (
-                  <option value={tag} key={index}>
-                    {tag}
-                  </option>
-                ))}
-              </Select>
-            )}
-            <Flex flexDirection="column">
-              <FormControl mt={4}>
-                <FormLabel fontWeight={"bold"} letterSpacing={"5px"}>
-                  Text
-                </FormLabel>
-                <Input
-                  placeholder="This is what the cat says"
-                  onChange={handleChangeText}
-                />
-              </FormControl>
-              <FormControl mt={4}>
-                <FormLabel fontWeight={"bold"} letterSpacing={"5px"}>
-                  Filter
-                </FormLabel>
-                <Select
-                  placeholder="Select a filter for the cat"
-                  onChange={handleChangeFilter}
-                >
-                  {FILTERS.map((filter) => (
-                    <option value={filter.toLowerCase()} key={filter}>
-                      {filter}
-                    </option>
-                  ))}
-                </Select>
-              </FormControl>
-            </Flex>
-          </Flex>
+          <CatForm
+            tags={tags}
+            catType={catType}
+            setCatType={setCatType}
+            handleChangeTag={handleChangeTag}
+            handleChangeText={handleChangeText}
+            handleChangeFilter={handleChangeFilter}
+          />
           <Stack direction="row">
             <Divider orientation="vertical" height="160px" color="white" />
           </Stack>

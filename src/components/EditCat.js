@@ -2,14 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import {
   Flex,
-  Radio,
-  RadioGroup,
-  Stack,
   Button,
-  FormControl,
-  FormLabel,
-  Input,
-  Select,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -20,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { Alert } from ".";
 import { constructPreview } from "../utils";
-import { FILTERS } from "../constants";
+import CatForm from "./CatForm";
 
 export const EditCat = ({ onEdit, onClose, urlCat, onRemove }) => {
   const defaultValuesGenerator = () => {
@@ -84,7 +77,7 @@ export const EditCat = ({ onEdit, onClose, urlCat, onRemove }) => {
       filter,
       onPreviewConstructed: setUrl,
     });
-  }, [tag, text, filter, catType]);
+  }, [tag, text, filter, isTag]);
 
   return (
     <Modal isOpen onClose={onClose}>
@@ -115,56 +108,14 @@ export const EditCat = ({ onEdit, onClose, urlCat, onRemove }) => {
             marginTop="2rem"
             marginBottom="2rem"
           >
-            <Flex flexDirection="column" minWidth="240px">
-              <RadioGroup onChange={setCatType} defaultValue={catType}>
-                <Stack direction="row" fontWeight="bold" letterSpacing="5px">
-                  <Radio value="gif">GIF</Radio>
-                  <Radio value="tag">PIC</Radio>
-                </Stack>
-              </RadioGroup>
-              {isTag && (
-                <Select
-                  placeholder="Select tag"
-                  onChange={handleChangeTag}
-                  defaultValue={tag}
-                  mt={4}
-                >
-                  {tags.map((tag, index) => (
-                    <option value={tag} key={index}>
-                      {tag}
-                    </option>
-                  ))}
-                </Select>
-              )}
-              <Flex flexDirection="column">
-                <FormControl mt={4}>
-                  <FormLabel fontWeight="bold" letterSpacing="5px">
-                    Text
-                  </FormLabel>
-                  <Input
-                    placeholder="This is what the cat says"
-                    onChange={handleChangeText}
-                    defaultValue={text}
-                  />
-                </FormControl>
-                <FormControl mt={4}>
-                  <FormLabel fontWeight="bold" letterSpacing="5px">
-                    Filter
-                  </FormLabel>
-                  <Select
-                    placeholder="Select a filter for the cat"
-                    onChange={handleChangeFilter}
-                    defaultValue={filter}
-                  >
-                    {FILTERS.map((filter) => (
-                      <option value={filter.toLowerCase()} key={filter}>
-                        {filter}
-                      </option>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Flex>
-            </Flex>
+            <CatForm
+              tags={tags}
+              catType={catType}
+              setCatType={setCatType}
+              handleChangeTag={handleChangeTag}
+              handleChangeText={handleChangeText}
+              handleChangeFilter={handleChangeFilter}
+            />
             <Button
               onClick={handleSumbit}
               mt={4}

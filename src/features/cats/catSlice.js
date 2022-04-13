@@ -7,6 +7,8 @@ export const catSlice = createSlice({
     tagsList: [],
     isError: false,
     isLoading: false,
+    errorMessage: null,
+    data: [],
   },
   reducers: {
     addCat: (state, action) => {
@@ -27,8 +29,21 @@ export const catSlice = createSlice({
       state.tagsList = action.payload;
       state.isLoading = false;
     },
-    getTagsFailure: (state) => {
+    getTagsFailure: (state, action) => {
+      state.errorMessage = action.payload;
       state.isLoading = false;
+      state.isError = true;
+    },
+    getCat: (state) => {
+      state.isLoading = true;
+    },
+    getCatSuccess: (state, { payload }) => {
+      state.isLoading = false;
+      state.data = [...state.data, payload];
+    },
+    getCatFailure: (state, { payload }) => {
+      state.isLoading = false;
+      state.errorMessage = payload;
       state.isError = true;
     },
   },
@@ -41,6 +56,9 @@ export const {
   addCat,
   editCat,
   removeCat,
+  getCat,
+  getCatSuccess,
+  getCatFailure,
 } = catSlice.actions;
 
 export default catSlice.reducer;
